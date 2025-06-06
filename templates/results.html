@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Results - {{ score }}/{{ total_questions }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+        <!-- Results Header -->
+        <div class="text-center mb-5">
+            <div class="results-score mb-3">
+                {% if percentage >= 80 %}
+                <i class="fas fa-trophy text-warning fa-4x mb-3"></i>
+                <h1 class="display-4 text-success">Excellent!</h1>
+                {% elif percentage >= 70 %}
+                <i class="fas fa-medal text-info fa-4x mb-3"></i>
+                <h1 class="display-4 text-info">Good Job!</h1>
+                {% elif percentage >= 60 %}
+                <i class="fas fa-thumbs-up text-primary fa-4x mb-3"></i>
+                <h1 class="display-4 text-primary">Not Bad!</h1>
+                {% else %}
+                <i class="fas fa-book text-warning fa-4x mb-3"></i>
+                <h1 class="display-4 text-warning">Keep Studying!</h1>
+                {% endif %}
+            </div>
+            
+            <div class="score-display">
+                <h2 class="display-5 mb-2">{{ score }} / {{ total_questions }}</h2>
+                <p><strong>Difficulty:</strong> {{ difficulty|capitalize }}</p>
+                {% if timer_enabled %}
+                  <p><strong>Timer:</strong> Enabled</p>
+                  <p><strong>Time Limit:</strong> {{ time_limit }} minutes</p>
+                {% else %}
+                  <p><strong>Timer:</strong> Off</p>
+                {% endif %}
+                <h3 class="text-muted">{{ "%.1f"|format(percentage) }}% Correct</h3>
+                <p class="lead">
+                    {% if specialty == 'mixed' %}
+                    Mixed Specialties Quiz
+                    {% else %}
+                    {{ specialty|title }} Quiz
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Performance Breakdown -->
+        {% if specialty_stats %}
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-header bg-info text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-chart-pie"></i>
+                    Performance by Specialty
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for spec, stats in specialty_stats.items() %}
+                    <div class="col-md-4 mb-3">
+                        <div class="specialty-stat text-center">
+                            {% if spec == 'cardiology' %}
+                            <i class="fas fa-heartbeat text-danger fa-2x mb-2"></i>
+                            {% elif spec == 'neurology' %}
+                            <i class="fas fa-brain text-info fa-2x mb-2"></i>
+                            {% elif spec == 'pulmonology' %}
+                            <i class="fas fa-lungs text-success fa-2x mb-2"></i>
+                            {% endif %}
+                            <h5>{{ spec|title }}</h5>
+                            <div class="progress mb-2" style="height: 10px;">
+                                <div class="progress-bar 
+                                    {% if spec == 'cardiology' %}bg-danger
+                                    {% elif spec == 'neurology' %}bg-info
+                                    {% else %}bg-success{% endif %}" 
+                                    role="progressbar" 
+                                    style="width: {{ (stats.correct / stats.total * 100)|round }}%">
+                                </div>
+                            </div>
+                            <strong>{{ stats.correct }} / {{ stats.total }}</strong>
+                            <small class="text-muted d-block">
+                                ({{ (stats.correct / stats.total * 100)|round }}%)
+                            </small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Detailed Review -->
+        <div class="card shadow-lg border-0 mb-4">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-list-check"></i>
+                    Detailed Review
+                </h4>
+            </div>
+            <div class="card-body">
+                {% for answer in answers %}
+                <div class="question-review mb-4 {% if not loop.last %}border-bottom pb-4{% endif %}">
+                    <div class="d-flex align-items-start mb-2">
+                        <div class="me-3">
+                            {% if answer.is_correct %}
+                            <i class="fas fa-check-circle text-success fa-lg"></i>
+                            {% else %}
+                            <i class="fas fa-times-circle text-danger fa-lg"></i>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h6 class="mb-1">Question {{ loop.index }}</h6>
+                                <span class="badge bg-secondary">{{ answer.specialty|title }}</span>
+                            </div>
+                            <p class="mb-2">{{ answer.question }}</p>
+                            
+                            <div class="answer-details">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <small class="text-muted">Your Answer:</small>
+                                        <div class="badge {% if answer.is_correct %}bg-success{% else %}bg-danger{% endif %} ms-1">
+                                            {{ answer.selected }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="text-muted">Correct Answer:</small>
+                                        <div class="badge bg-success ms-1">
+                                            {{ answer.correct }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {% if answer.explanation %}
+                                <div class="explanation mt-2">
+                                    <small class="text-muted">
+                                        <strong>Explanation:</strong> {{ answer.explanation }}
+                                    </small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-redo"></i>
+                Take New Quiz
+            </a>
+            <a href="{{ url_for('reset') }}" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

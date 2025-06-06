@@ -1,0 +1,109 @@
+# SilentSentinel: AI-Powered Medical MCQ Generator (Demo Script)
+
+def main():
+    questions = [
+        # Cardiology
+        {
+            "question": "What is the most common cause of myocardial infarction?",
+            "options": [
+                "A. Aortic dissection",
+                "B. Coronary artery spasm",
+                "C. Coronary artery thrombosis",
+                "D. Pericarditis"
+            ],
+            "answer": "C"
+        },
+        {
+            "question": "A 65-year-old man presents with chest pain and ST elevation in leads II, III, and aVF. Which artery is most likely occluded?",
+            "options": [
+                "A. Left anterior descending",
+                "B. Right coronary artery",
+                "C. Circumflex artery",
+                "D. Left main coronary artery"
+            ],
+            "answer": "B"
+        },
+        {
+            "question": "Which of the following is a contraindication for beta-blockers in acute heart failure?",
+            "options": [
+                "A. Atrial fibrillation",
+                "B. Low ejection fraction",
+                "C. Pulmonary edema",
+                "D. Hypertension"
+            ],
+            "answer": "C"
+        },
+
+        # Neurology
+        {
+            "question": "A patient presents with resting tremor, bradykinesia, and rigidity. What is the most likely diagnosis?",
+            "options": [
+                "A. Huntington’s disease",
+                "B. Parkinson’s disease",
+                "C. Multiple sclerosis",
+                "D. ALS"
+            ],
+            "answer": "B"
+        },
+        {
+            "question": "Which of the following is the first-line treatment for status epilepticus?",
+            "options": [
+                "A. Levetiracetam",
+                "B. Phenytoin",
+                "C. Diazepam",
+                "D. Valproate"
+            ],
+            "answer": "C"
+        },
+        {
+            "question": "A lesion in Broca’s area will most likely cause:",
+            "options": [
+                "A. Fluent aphasia with impaired comprehension",
+                "B. Non-fluent aphasia with preserved comprehension",
+                "C. Global aphasia",
+                "D. Receptive aphasia"
+            ],
+            "answer": "B"
+        },
+
+        # Pulmonology
+        {
+            "question": "Which of the following is a hallmark feature of chronic bronchitis?",
+            "options": [
+                "A. Progressive dyspnea",
+                "B. Productive cough for 3 months in 2 consecutive years",
+                "C. Hemoptysis",
+                "D. Clubbing"
+            ],
+            "answer": "B"
+        },
+        {
+            "question": "A 25-year-old presents with sudden-onset dyspnea and pleuritic chest pain. Decreased breath sounds on one side are noted. Most likely diagnosis?",
+            "options": [
+                "A. Asthma",
+                "B. Pneumonia",
+                "C. Spontaneous pneumothorax",
+                "D. COPD"
+            ],
+            "answer": "C"
+        },
+        {
+            "question": "What is the first-line treatment for acute asthma exacerbation?",
+            "options": [
+                "A. Inhaled corticosteroids",
+                "B. Oral theophylline",
+                "C. Short-acting beta-agonists",
+                "D. Leukotriene receptor antagonists"
+            ],
+            "answer": "C"
+        }
+    ]
+
+    for idx, q in enumerate(questions, 1):
+        print(f"Q{idx}: {q['question']}")
+        for option in q["options"]:
+            print(option)
+        print(f"Answer: {q['answer']}\n")
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Quiz Generator - Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-3">
+                <i class="fas fa-stethoscope text-primary"></i>
+                Medical Quiz Generator
+            </h1>
+            <p class="lead text-muted">
+                Test your knowledge across three critical medical specialties with professionally crafted multiple-choice questions.
+            </p>
+        </div>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-clipboard-list"></i>
+                    Select Your Quiz Specialty
+                </h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('start_quiz') }}">
+                    <div class="row g-3">
+                        <!-- Cardiology -->
+                        <div class="col-md-6">
+                            <div class="specialty-card" onclick="selectSpecialty('cardiology')">
+                                <input type="radio" name="specialty" value="cardiology" id="cardiology" class="d-none">
+                                <label for="cardiology" class="card h-100 specialty-option cursor-pointer">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-heartbeat text-danger fa-3x mb-3"></i>
+                                        <h5 class="card-title">Cardiology</h5>
+                                        <p class="card-text text-muted">
+                                            Heart conditions, ECG interpretation, cardiac medications
+                                        </p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Neurology -->
+                        <div class="col-md-6">
+                            <div class="specialty-card" onclick="selectSpecialty('neurology')">
+                                <input type="radio" name="specialty" value="neurology" id="neurology" class="d-none">
+                                <label for="neurology" class="card h-100 specialty-option cursor-pointer">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-brain text-info fa-3x mb-3"></i>
+                                        <h5 class="card-title">Neurology</h5>
+                                        <p class="card-text text-muted">
+                                            Neurological disorders, brain anatomy, treatment protocols
+                                        </p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Pulmonology -->
+                        <div class="col-md-6">
+                            <div class="specialty-card" onclick="selectSpecialty('pulmonology')">
+                                <input type="radio" name="specialty" value="pulmonology" id="pulmonology" class="d-none">
+                                <label for="pulmonology" class="card h-100 specialty-option cursor-pointer">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-lungs text-success fa-3x mb-3"></i>
+                                        <h5 class="card-title">Pulmonology</h5>
+                                        <p class="card-text text-muted">
+                                            Respiratory conditions, lung function, breathing disorders
+                                        </p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Mixed -->
+                        <div class="col-md-6">
+                            <div class="specialty-card" onclick="selectSpecialty('mixed')">
+                                <input type="radio" name="specialty" value="mixed" id="mixed" class="d-none" checked>
+                                <label for="mixed" class="card h-100 specialty-option cursor-pointer selected">
+                                    <div class="card-body text-center">
+                                        <i class="fas fa-random text-warning fa-3x mb-3"></i>
+                                        <h5 class="card-title">Mixed Specialties</h5>
+                                        <p class="card-text text-muted">
+                                            Random questions from all three medical specialties
+                                        </p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Difficulty dropdown -->
+                    <div class="mt-4">
+                        <label for="difficulty" class="form-label">Select Difficulty:</label>
+                        <select class="form-select" name="difficulty" id="difficulty">
+                            <option value="easy" selected>Easy</option>
+                            <option value="medium">Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                    <div class="form-check mt-3">
+                      <input class="form-check-input" type="checkbox" name="enable_timer" id="enable_timer">
+                      <label class="form-check-label" for="enable_timer">
+                        Enable Time Limit
+                      </label>
+                    </div>
+
+                    <div class="mt-2">
+                      <label for="time_limit" class="form-label">Select Time Limit:</label>
+                      <select class="form-select" name="time_limit" id="time_limit">
+                        <option value="5">5 Minutes</option>
+                        <option value="10">10 Minutes</option>
+                      </select>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-play"></i>
+                            Start Quiz
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-md-4 text-center mb-3">
+                <div class="feature-item">
+                    <i class="fas fa-question-circle text-primary fa-2x mb-2"></i>
+                    <h6>Professional Questions</h6>
+                    <small class="text-muted">Clinically relevant multiple-choice questions</small>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <div class="feature-item">
+                    <i class="fas fa-chart-line text-success fa-2x mb-2"></i>
+                    <h6>Performance Tracking</h6>
+                    <small class="text-muted">Detailed results and specialty breakdown</small>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-3">
+                <div class="feature-item">
+                    <i class="fas fa-graduation-cap text-info fa-2x mb-2"></i>
+                    <h6>Educational Value</h6>
+                    <small class="text-muted">Learn with detailed answer explanations</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

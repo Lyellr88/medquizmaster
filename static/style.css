@@ -1,0 +1,202 @@
+/* Medical Quiz Generator Custom Styles */
+
+:root {
+    --medical-primary: #0066cc;
+    --medical-success: #28a745;
+    --medical-danger: #dc3545;
+    --medical-warning: #ffc107;
+    --medical-info: #17a2b8;
+    --specialty-cardiology: #dc3545;
+    --specialty-neurology: #17a2b8;
+    --specialty-pulmonology: #28a745;
+}
+
+/* Utility Classes */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* Specialty Selection Cards */
+.specialty-option {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.specialty-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: #ffffff !important;
+    border-width: 3px !important;
+}
+
+.specialty-option.selected {
+    border-color: var(--bs-primary);
+    background-color: var(--bs-primary-bg-subtle);
+}
+
+/* Quiz Answer Cards */
+.answer-card {
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    margin-bottom: 0.5rem;
+}
+
+.answer-card:hover {
+    border-color: #ffffff !important;
+    border-width: 3px !important;
+}
+
+.answer-card.selected {
+    border-color: var(--bs-success);
+    background-color: var(--bs-success-bg-subtle);
+}
+
+.option-letter .badge {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Progress Bar Animations */
+.progress-bar {
+    transition: width 0.6s ease;
+}
+
+/* Results Page Styling */
+.results-score {
+    animation: fadeInUp 0.6s ease;
+}
+
+.score-display {
+    animation: fadeInUp 0.8s ease;
+}
+
+.question-review {
+    animation: fadeInLeft 0.4s ease;
+    animation-fill-mode: both;
+}
+
+.question-review:nth-child(1) { animation-delay: 0.1s; }
+.question-review:nth-child(2) { animation-delay: 0.2s; }
+.question-review:nth-child(3) { animation-delay: 0.3s; }
+.question-review:nth-child(4) { animation-delay: 0.4s; }
+.question-review:nth-child(5) { animation-delay: 0.5s; }
+
+/* Specialty Stats */
+.specialty-stat {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--bs-light-bg-subtle);
+}
+
+/* Feature Items */
+.feature-item {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .display-5 {
+        font-size: 1.5rem;
+    }
+    
+    .specialty-option {
+        margin-bottom: 1rem;
+    }
+    
+    .answer-card {
+        font-size: 0.9rem;
+    }
+}
+
+/* Dark Theme Enhancements */
+[data-bs-theme="dark"] .specialty-option:hover {
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .answer-card:hover {
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .feature-item {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Button Styles */
+.btn-primary {
+    background-color: var(--medical-primary);
+    border-color: var(--medical-primary);
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Quiz Navigation */
+.quiz-navigation {
+    position: sticky;
+    bottom: 20px;
+    z-index: 1000;
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--bs-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}

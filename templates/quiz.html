@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Quiz - Question {{ question_num }}{% endblock %}
+
+{% block content %}
+<div id="timer" style="font-weight: bold; font-size: 1.2em; color: #d9534f; margin-bottom: 1rem;">
+  Time Remaining: Loading...
+</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+        <!-- Progress Bar -->
+        <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted">Question {{ question_num }} of {{ total_questions }}</span>
+                <span class="badge bg-secondary">{{ specialty|title }} Quiz</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+                <div class="progress-bar bg-primary" role="progressbar" 
+                     style="width: {{ progress }}%" 
+                     aria-valuenow="{{ progress }}" 
+                     aria-valuemin="0" 
+                     aria-valuemax="100">
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-question-circle"></i>
+                    Question {{ question_num }}
+                    <span class="badge bg-light text-dark ms-2">{{ question.specialty|title }}</span>
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="question-text mb-4">
+                    <p class="lead">{{ question.question }}</p>
+                </div>
+
+                <form method="POST" action="{{ url_for('submit_answer') }}" id="quizForm">
+                    <div class="row g-2">
+                        {% for option in question.options %}
+                        <div class="col-12">
+                            <div class="answer-option">
+                                <input type="radio" 
+                                       name="answer" 
+                                       value="{{ option[0] }}" 
+                                       id="option{{ loop.index }}" 
+                                       class="d-none answer-input"
+                                       required>
+                                <label for="option{{ loop.index }}" 
+                                       class="card answer-card cursor-pointer w-100">
+                                    <div class="card-body d-flex align-items-center">
+                                        <div class="option-letter me-3">
+                                            <span class="badge bg-secondary rounded-circle p-2">
+                                                {{ option[0] }}
+                                            </span>
+                                        </div>
+                                        <div class="option-text flex-grow-1">
+                                            {{ option[2:] }}
+                                        </div>
+                                        <div class="option-check ms-2">
+                                            <i class="fas fa-circle-check text-success d-none"></i>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg px-5" id="submitBtn" disabled>
+                            <i class="fas fa-arrow-right"></i>
+                            Submit Answer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quiz Navigation -->
+        <div class="text-center mt-3">
+            <a href="{{ url_for('reset') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-times"></i>
+                End Quiz
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const answerInputs = document.querySelectorAll('.answer-input');
+    const submitBtn = document.getElementById('submitBtn');
+    const answerCards = document.querySelectorAll('.answer-card');
+
+    // Handle answer selection
+    answerInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            // Remove selected class from all cards
+            answerCards.forEach(card => {
+                card.classList.remove('selected');
+                card.querySelector('.option-check i').classList.add('d-none');
+            });
+
+            // Add selected class to chosen card
+            if (this.checked) {
+                const label = document.querySelector(`label[for="${this.id}"]`);
+                label.classList.add('selected');
+                label.querySelector('.option-check i').classList.remove('d-none');
+                submitBtn.disabled = false;
+            }
+        });
+    });
+
+    // Handle card clicks
+    answerCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const input = document.getElementById(this.getAttribute('for'));
+            input.checked = true;
+            input.dispatchEvent(new Event('change'));
+        });
+    });
+});
+</script>
+
+<script>
+  // Get time limit from Flask (in minutes), convert to seconds
+  const timeLimit = {{ time_limit|default(0)|int }} * 60;
+  let remaining = timeLimit;
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  function updateTimer() {
+    const timerDiv = document.getElementById("timer");
+    if (remaining > 0) {
+      timerDiv.textContent = `Time Remaining: ${formatTime(remaining)}`;
+      remaining--;
+      setTimeout(updateTimer, 1000);
+    } else {
+      timerDiv.textContent = "Time's up!";
+      document.getElementById("quizForm").submit(); // Optional auto-submit
+    }
+  }
+
+  // Timer activation logic
+  const timerEnabled = "{{ 'true' if timer_enabled else 'false' }}" === "true";
+  if (timerEnabled && timeLimit > 0) {
+    updateTimer();
+  } else {
+    document.getElementById("timer").style.display = "none";
+  }
+</script>
+
+{% endblock %}
